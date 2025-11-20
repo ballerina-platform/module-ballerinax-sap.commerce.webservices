@@ -21,6 +21,74 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'java'
 
 def graalvmFlag = ""
+def packageOrg = "ballerinax"
+def packageName = "sap.commerce.webservices"
+def tomlVersion = stripBallerinaExtensionVersion("${project.version}")
+
+def stripBallerinaExtensionVersion(String extVersion) {
+    if (extVersion.matches(project.rootProject.ext.timestampedVersionRegex)) {
+        def splitVersion = extVersion.split('-')
+        if (splitVersion.length > 3) {
+            def strippedValues = splitVersion[0..-4]
+            return strippedValues.join('-')
+        } else {
+            return extVersion
+        }
+    } else {
+        return extVersion.replace("-SNAPSHOT", "")
+    }
+}
+
+task updateExampleTomlFiles {
+    doLast {
+        // Find all Ballerina.toml files in example subdirectories
+        fileTree(projectDir) {
+            include '**/Ballerina.toml'
+            exclude 'build/**'
+        }.each { tomlFile ->
+            def content = tomlFile.text
+
+            // Update the dependency version for sap.commerce.webservices
+            def pattern = ~/(\[\[dependency\]\]\s+org\s*=\s*"${packageOrg}"\s+name\s*=\s*"${packageName.replaceAll('\\.', '\\\\.')}"\s+version\s*=\s*")[^"]+"(.*)/
+            def updatedContent = content.replaceAll(pattern, "\$1${tomlVersion}\"\$2")
+
+            if (content != updatedContent) {
+                tomlFile.text = updatedContent
+                println "Updated dependency version to ${tomlVersion} in ${tomlFile.path}"
+            }
+        }
+    }
+}
+
+task commitTomlFiles {
+    dependsOn updateExampleTomlFiles
+    doLast {
+        // Find all Ballerina.toml files to commit
+        def tomlFiles = []
+        fileTree(projectDir) {
+            include '**/Ballerina.toml'
+            exclude 'build/**'
+        }.each { file ->
+            tomlFiles.add(file.path.replace(projectDir.path + '/', ''))
+        }
+
+        if (tomlFiles.isEmpty()) {
+            println "No Ballerina.toml files found to commit"
+            return
+        }
+
+        def filesList = tomlFiles.join(' ')
+        project.exec {
+            ignoreExitValue true
+            workingDir projectDir
+            if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+                commandLine 'cmd', '/c', "git add ${filesList} && git commit -m \"[Automated] Update example toml files\" ${filesList}"
+            } else {
+                commandLine 'sh', '-c', "git add ${filesList} && git commit -m '[Automated] Update example toml files' ${filesList}"
+            }
+        }
+    }
+}
 
 task testExamples {
     if (project.hasProperty("balGraalVMTest")) {
@@ -45,13 +113,6 @@ task testExamples {
 }
 
 task buildExamples {
-    gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(":sap.commerce.webservices-examples:test")) {
-            buildExamples.enabled = false
-        } else {
-            testExamples.enabled = false
-        }
-    }
     doLast {
         try {
             exec {
@@ -70,9 +131,18 @@ task buildExamples {
     }
 }
 
-buildExamples.dependsOn ":sap.commerce.webservices-ballerina:build"
-testExamples.dependsOn ":sap.commerce.webservices-ballerina:build"
+// Examples need the package published to local central before they can build
+// Update example toml files with correct version before building
+buildExamples.dependsOn updateExampleTomlFiles
+buildExamples.dependsOn ":sap.commerce.webservices-ballerina:publishToLocalCentral"
+testExamples.dependsOn updateExampleTomlFiles
+testExamples.dependsOn ":sap.commerce.webservices-ballerina:publishToLocalCentral"
 
-// TODO: Enable the examples build once https://github.com/ballerina-platform/ballerina-library/issues/6135 is fixed
-// test.dependsOn testExamples
-// build.dependsOn buildExamples
+// Enable examples build - it will fail the build if examples fail to compile
+// Only compile examples during build, don't run them (testExamples runs the examples)
+build.dependsOn buildExamples
+check.dependsOn buildExamples
+// Commit toml files after updating them
+build.dependsOn commitTomlFiles
+// Disable test task to prevent testExamples from running during normal build
+test.enabled = false

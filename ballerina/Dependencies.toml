@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.13.0"
+distribution-version = "2201.13.1"
 
 [[package]]
 org = "ballerina"
@@ -88,7 +88,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.15.0"
+version = "2.15.1"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -267,9 +267,6 @@ dependencies = [
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
 ]
-modules = [
-	{org = "ballerina", packageName = "oauth2", moduleName = "oauth2"}
-]
 
 [[package]]
 org = "ballerina"
@@ -360,14 +357,13 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "sap.commerce.webservices"
-version = "0.1.0"
+version = "0.9.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "data.jsondata"},
 	{org = "ballerina", name = "data.xmldata"},
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "mime"},
-	{org = "ballerina", name = "oauth2"},
 	{org = "ballerina", name = "os"},
 	{org = "ballerina", name = "test"},
 	{org = "ballerina", name = "url"},
