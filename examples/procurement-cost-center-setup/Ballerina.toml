@@ -10,5 +10,5 @@ observabilityIncluded = true
 [[dependency]]
 org = "ballerinax"
 name = "sap.commerce.webservices"
-version = "0.10.0"
+version = "0.9.0"
 repository = "local"
