@@ -59,7 +59,10 @@ def moduleVersion = project.version.replace("-SNAPSHOT", "")
 
 task build {
     dependsOn(':sap.commerce.webservices-ballerina:build')
-    dependsOn(':sap.commerce.webservices-examples:build')
+    // Skip examples build if skipExamples property is set (useful for release workflows)
+    if (!project.hasProperty('skipExamples')) {
+        dependsOn(':sap.commerce.webservices-examples:build')
+    }
 }
 
 release {
