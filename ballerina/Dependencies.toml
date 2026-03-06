@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.13.0"
+distribution-version = "2201.13.1"
 
 [[package]]
 org = "ballerina"
@@ -44,7 +44,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "crypto"
-version = "2.9.2"
+version = "2.9.3"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -65,7 +65,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "data.xmldata"
-version = "1.5.2"
+version = "1.5.3"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.object"}
@@ -88,7 +88,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.15.3"
+version = "2.15.4"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -291,7 +291,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.11.0"
+version = "2.11.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"},
