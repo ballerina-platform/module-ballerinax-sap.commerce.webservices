@@ -2,7 +2,15 @@
 
 [SAP Commerce Cloud](https://www.sap.com/products/crm/commerce-cloud.html) is a comprehensive e-commerce platform that enables businesses to deliver personalized, omnichannel shopping experiences across all touchpoints, from web and mobile to social and in-store interactions.
 
-The `ballerinax/sap.commerce.webservices` package offers APIs to connect and interact with [SAP Commerce Cloud API](https://help.sap.com/docs/SAP_COMMERCE_CLOUD_PUBLIC_CLOUD/0995c8579f3d4ea2a7c0e1ef5e2b3d1c/8c91f3a486691014b085fb11c44412fc.html) endpoints, specifically based on [SAP Commerce Web Services API v2](https://help.sap.com/docs/SAP_COMMERCE_CLOUD_PUBLIC_CLOUD/d0224eca81e249cb821f2cdf45a82ace/8c91f3a486691014b085fb11c44412fc.html).
+The SAP Commerce Web Services connector offers APIs to connect and interact with SAP Commerce Cloud API endpoints, specifically based on SAP Commerce Web Services API v2.
+
+### Key Features
+
+- Deliver personalized omnichannel shopping experiences
+- Integration with SAP Commerce Web Services API v2
+- Support for various e-commerce operations across web, mobile, and social
+- Comprehensive management of customer interactions and transactions
+
 ## Setup guide
 
 To use the SAP Commerce Web Services connector, you must have access to SAP Commerce Cloud (formerly SAP Hybris) through a valid SAP account and configure OAuth2 authentication credentials. If you do not have an SAP account, you can sign up for one [here](https://www.sap.com/registration.html) and explore SAP Commerce Cloud solutions at the [SAP Commerce Cloud portal](https://www.sap.com/products/commerce-cloud.html).
