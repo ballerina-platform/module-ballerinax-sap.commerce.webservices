@@ -57,7 +57,7 @@ allprojects {
 
 def moduleVersion = project.version.replace("-SNAPSHOT", "")
 
-task build {
+tasks.named('build') {
     dependsOn(':sap.commerce.webservices-ballerina:build')
     // Skip examples build if skipExamples property is set (useful for release workflows)
     if (!project.hasProperty('skipExamples')) {
